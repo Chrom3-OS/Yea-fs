@@ -37,19 +37,19 @@ Successfully implemented a complete, production-ready Docker integration for res
 ### 5. Directory Structure
 ```
 /
-├── docker-compose.yml          # Docker Compose config
-├── DOOM-SETUP.md              # Quick start guide
-├── README.md                   # Main docs
-├── validate-doom.sh           # Validation script
-├── .gitignore                 # Excludes WADs
+├── docker-compose.yml             # Docker Compose config
+├── DOOM-SETUP.md                  # Quick start guide
+├── README.md                      # Main docs
+├── validate-doom.sh               # Validation script
+├── .gitignore                     # Excludes WADs
 └── public/games/doom/
-    ├── Dockerfile.build       # Build configuration
-    ├── index.html             # Web interface
-    ├── README.txt             # Technical docs
-    ├── LICENSE.txt            # License info
-    ├── run_restful_doom.sh    # Helper script
-    └── wads/                  # WAD directory
-        └── .gitkeep           # Keeps dir in git
+    ├── Dockerfile.build           # Build configuration
+    ├── index.html                 # Web interface
+    ├── README.txt                 # Technical docs
+    ├── LICENSE.txt                # License info
+    ├── run_restful_doom.sh        # Helper script
+    └── wads/                      # WAD directory
+        └── .gitkeep               # Keeps dir in git
 ```
 
 ## User Workflows Supported
@@ -154,9 +154,10 @@ python3 -m http.server --directory public 8000      # 1 command
 3. `DOOM-SETUP.md` - Quick start guide
 4. `README.md` - Main documentation
 5. `validate-doom.sh` - Validation script
-6. `public/games/doom/index.html` - Web interface
-7. `public/games/doom/LICENSE.txt` - License info
-8. `public/games/doom/wads/.gitkeep` - Dir structure
+6. `IMPLEMENTATION.md` - Technical implementation summary
+7. `public/games/doom/index.html` - Web interface
+8. `public/games/doom/LICENSE.txt` - License info
+9. `public/games/doom/wads/.gitkeep` - Dir structure
 
 ### Modified (3 files)
 1. `public/games/doom/README.txt` - Added Docker instructions
