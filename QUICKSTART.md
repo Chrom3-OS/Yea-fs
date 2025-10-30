@@ -65,6 +65,11 @@ Follow the implementation steps in the JSON file and ensure:
 
 ## Common Commands
 
+**Note:** These commands use `jq` (JSON processor). Install it with:
+- Ubuntu/Debian: `sudo apt-get install jq`
+- macOS: `brew install jq`
+- Windows: Download from [stedolan.github.io/jq](https://stedolan.github.io/jq/)
+
 ### View all games in JSON
 ```bash
 cat games.json | jq '.games[].name'
@@ -112,11 +117,11 @@ cat games.json | jq '.games[] | {name, license}'
 
 ## Tips
 
-💡 **Start Simple**: Begin with games like Snake or 2048  
-💡 **Test Locally**: Always test with a local web server  
-💡 **Check Licenses**: Review license requirements before deploying  
-💡 **Mobile Support**: Consider adding touch controls for mobile users  
-💡 **Performance**: Minify files for production deployment  
+💡 **Start Simple**: Begin with games like Snake or 2048 - they have minimal dependencies  
+💡 **Test Locally**: Use `python3 -m http.server 8000` or `npx http-server` to test  
+💡 **Check Licenses**: Review license requirements in games.json before deploying  
+💡 **Mobile Support**: Add touch event listeners to keyboard controls for mobile compatibility  
+💡 **Performance**: Minify files using tools like `terser` (JS) and `cssnano` (CSS) for production  
 
 ---
 
