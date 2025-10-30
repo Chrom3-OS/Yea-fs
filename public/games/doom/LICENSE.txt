@@ -1,0 +1,43 @@
+DOOM Integration for Yea-fs
+===========================
+
+This integration uses restful-doom, which is based on Chocolate Doom.
+
+Components and Licenses:
+------------------------
+
+1. Chocolate Doom (https://github.com/chocolate-doom/chocolate-doom)
+   License: GNU General Public License v2.0
+   
+2. restful-doom (https://github.com/jeff-1amstudios/restful-doom)
+   License: GNU General Public License v2.0
+   A fork of Chocolate Doom that adds a RESTful HTTP API
+   
+3. FreeDoom (https://freedoom.github.io/)
+   License: BSD 3-Clause License
+   Free and open source game assets for DOOM engine
+   User must download separately from https://freedoom.github.io/download.html
+
+4. Docker configuration files (Dockerfile.build, docker-compose.yml, run_restful_doom.sh)
+   Part of this repository (Yea-fs)
+   
+5. Web interface (index.html)
+   Part of this repository (Yea-fs)
+
+IMPORTANT NOTES:
+---------------
+- This repository does NOT include any DOOM WAD files (game assets)
+- Users must download FreeDoom WAD files separately
+- Do NOT use or distribute copyrighted commercial DOOM WADs
+- FreeDoom is a completely free and open source alternative
+
+For complete license texts:
+- Chocolate Doom/restful-doom: https://github.com/chocolate-doom/chocolate-doom/blob/master/COPYING
+- FreeDoom: https://github.com/freedoom/freedoom/blob/master/COPYING.txt
+
+Attribution:
+-----------
+- Original DOOM by id Software
+- Chocolate Doom by Simon Howard and contributors
+- restful-doom by jeff-1amstudios
+- FreeDoom by FreeDoom Project contributors

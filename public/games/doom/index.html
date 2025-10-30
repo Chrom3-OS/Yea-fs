@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOOM - Restful Doom Integration</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+        h1 {
+            color: #ff4444;
+            text-align: center;
+            font-size: 3em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .info-box {
+            background: #2a2a2a;
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .warning {
+            background: #3a2a1a;
+            border-color: #ff8800;
+        }
+        .success {
+            background: #1a3a1a;
+            border-color: #44ff44;
+        }
+        .error {
+            background: #3a1a1a;
+            border-color: #ff4444;
+        }
+        h2 {
+            margin-top: 0;
+            color: #ff8844;
+        }
+        code {
+            background: #1a1a1a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border: 1px solid #444;
+        }
+        button {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #ff6666;
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .status {
+            text-align: center;
+            margin: 20px 0;
+        }
+        #game-root {
+            background: #000;
+            border: 3px solid #444;
+            border-radius: 8px;
+            min-height: 400px;
+            margin: 20px 0;
+            padding: 20px;
+            display: none;
+        }
+        a {
+            color: #ff8844;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ol {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 DOOM</h1>
+        
+        <div class="info-box warning">
+            <h2>⚠️ Docker Setup Required</h2>
+            <p>This DOOM integration uses <strong>restful-doom</strong>, which runs as a Docker container that exposes an HTTP API.</p>
+            <p><strong>To play DOOM, you need to:</strong></p>
+            <ol>
+                <li>Download FreeDoom WAD files from <a href="https://freedoom.github.io/download.html" target="_blank">freedoom.github.io</a></li>
+                <li>Place <code>freedoom1.wad</code> or <code>freedoom2.wad</code> in <code>public/games/doom/wads/</code></li>
+                <li>Run the Docker container using one of these methods:</li>
+            </ol>
+        </div>
+
+        <div class="info-box">
+            <h2>🐳 Docker Setup Instructions</h2>
+            
+            <h3>Option 1: Docker Compose (Easiest)</h3>
+            <pre>docker-compose up</pre>
+            <p>This will build and start the restful-doom server on port 6666.</p>
+
+            <h3>Option 2: Manual Docker Commands</h3>
+            <pre># Build the image
+docker build -f public/games/doom/Dockerfile.build -t restful-doom-build .
+
+# Run the container
+docker run --rm -v "$PWD/public/games/doom/wads":/wads -p 6666:6666 restful-doom-build \
+  bash -c "WAD=$$(ls /wads/freedoom*.wad | head -1) && /opt/restful-doom/src/restful-doom -iwad $$WAD -apiport 6666 -window"</pre>
+
+            <h3>Option 3: Using the Helper Script</h3>
+            <pre>cd public/games/doom
+./run_restful_doom.sh</pre>
+        </div>
+
+        <div class="status">
+            <div id="status-message" class="info-box">
+                <h2>📡 Checking Server Status...</h2>
+                <p id="status-text">Attempting to connect to restful-doom API at http://localhost:6666</p>
+                <button onclick="checkStatus()" id="check-btn">Check Again</button>
+            </div>
+        </div>
+
+        <div id="game-root">
+            <h2 style="color: #ff8844;">🎯 Game Interface</h2>
+            <p>The restful-doom API is running! You can interact with it using the controls below or through API calls.</p>
+            <p><strong>API Endpoint:</strong> <code>http://localhost:6666</code></p>
+            <p>Note: This is a server-side DOOM instance with an HTTP API. For a full browser-based experience, you would need to implement a JavaScript client that sends commands to the API and displays the game state.</p>
+            
+            <div style="margin-top: 20px;">
+                <h3>Quick Actions:</h3>
+                <button onclick="sendCommand('new_game')">New Game</button>
+                <button onclick="sendCommand('forward')">Move Forward</button>
+                <button onclick="sendCommand('back')">Move Back</button>
+                <button onclick="sendCommand('left')">Turn Left</button>
+                <button onclick="sendCommand('right')">Turn Right</button>
+                <button onclick="sendCommand('shoot')">Shoot</button>
+            </div>
+            
+            <pre id="api-response" style="margin-top: 20px; max-height: 300px; overflow-y: auto;"></pre>
+        </div>
+
+        <div class="info-box">
+            <h2>📚 Additional Resources</h2>
+            <ul>
+                <li><a href="https://github.com/jeff-1amstudios/restful-doom" target="_blank">restful-doom GitHub Repository</a></li>
+                <li><a href="https://freedoom.github.io/" target="_blank">FreeDoom Project</a></li>
+                <li><a href="/games/">Back to Games List</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:6666';
+        let serverOnline = false;
+
+        async function checkStatus() {
+            const statusBox = document.getElementById('status-message');
+            const statusText = document.getElementById('status-text');
+            const checkBtn = document.getElementById('check-btn');
+            const gameRoot = document.getElementById('game-root');
+            
+            checkBtn.disabled = true;
+            statusText.textContent = 'Checking...';
+            
+            try {
+                const response = await fetch(API_URL, { 
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                if (response.ok) {
+                    serverOnline = true;
+                    statusBox.className = 'info-box success';
+                    statusBox.innerHTML = '<h2>✅ Server Online!</h2><p>The restful-doom API is running and ready to play.</p>';
+                    gameRoot.style.display = 'block';
+                } else {
+                    throw new Error('Server returned error');
+                }
+            } catch (error) {
+                serverOnline = false;
+                statusBox.className = 'info-box error';
+                statusBox.innerHTML = `
+                    <h2>❌ Server Not Running</h2>
+                    <p>Could not connect to restful-doom API at ${API_URL}</p>
+                    <p><strong>Make sure you have:</strong></p>
+                    <ul>
+                        <li>Downloaded FreeDoom WAD files</li>
+                        <li>Placed WAD files in <code>public/games/doom/wads/</code></li>
+                        <li>Started the Docker container (see instructions above)</li>
+                    </ul>
+                    <button onclick="checkStatus()" id="check-btn">Try Again</button>
+                `;
+                gameRoot.style.display = 'none';
+            }
+        }
+
+        async function sendCommand(action) {
+            const responseBox = document.getElementById('api-response');
+            try {
+                const response = await fetch(`${API_URL}/${action}`, {
+                    method: 'POST',
+                    mode: 'cors'
+                });
+                const data = await response.text();
+                responseBox.textContent = `Command: ${action}\nResponse: ${data}`;
+            } catch (error) {
+                responseBox.textContent = `Error sending command: ${error.message}`;
+            }
+        }
+
+        // Check status on page load
+        window.addEventListener('load', checkStatus);
+    </script>
+</body>
+</html>

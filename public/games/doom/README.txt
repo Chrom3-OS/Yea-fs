@@ -1,33 +1,113 @@
+DOOM Integration — Native/Server Mode (restful-doom)
+=====================================================
 
-DOOM integration notes — native/server-mode (restful-doom)
+This folder contains a complete Docker-based integration of restful-doom for local play.
 
-This folder is a placeholder for DOOM integrations. There are two main integration approaches:
+What is restful-doom?
+--------------------
+restful-doom is a fork of Chocolate Doom that exposes an HTTP/JSON API, allowing you to 
+control the game programmatically. It runs as a native server binary (not browser WASM).
 
-- Browser (WASM) engine: place a prebuilt `engine.wasm` + `engine.js` + `freedoom.wad` and expose an `index.html` that mounts the engine to a canvas. See `instruction.json` for the expected file layout.
+Project: https://github.com/jeff-1amstudios/restful-doom
 
-- Native/server (recommended for `restful-doom`): `restful-doom` is a native C program built on Chocolate Doom that exposes an HTTP/JSON API while running the game. It is not a WASM browser engine and runs as a server binary.
 
-This repository includes a helper Docker build that clones and builds `restful-doom` (https://github.com/jeff-1amstudios/restful-doom) and produces a runnable binary.
+QUICK START (Easiest Way)
+=========================
 
-Files added:
-- `Dockerfile.build` — builds `restful-doom` from upstream inside a Debian container and produces `src/restful-doom`.
-- `run_restful_doom.sh` — helper script to run the built binary with a WAD file (mounts/paths shown).
+1. Download FreeDoom WAD files:
+   Visit: https://freedoom.github.io/download.html
+   Download either freedoom1.wad or freedoom2.wad (or both)
 
-Quick Docker build & run (from repo root):
+2. Place WAD files:
+   Copy the downloaded .wad file(s) to: public/games/doom/wads/
 
-```bash
-# build an image that compiles restful-doom
+3. Start the server:
+   From the repository root, run:
+   
+   docker-compose up
+
+4. Open the game interface:
+   Navigate to: http://localhost:8000/games/doom/
+   (Requires a static file server running on port 8000)
+
+5. The DOOM API will be available at:
+   http://localhost:6666
+
+
+ALTERNATIVE METHODS
+===================
+
+Method 1: Using the helper script
+----------------------------------
+cd public/games/doom
+./run_restful_doom.sh
+
+Method 2: Manual Docker commands
+---------------------------------
+# From repository root:
+
+# Build the image
 docker build -f public/games/doom/Dockerfile.build -t restful-doom-build .
 
-# create a container and run the binary with a FreeDoom WAD mounted from ./public/games/doom/wads
-# (place freedoom.wad at ./public/games/doom/wads/freedoom.wad)
-docker run --rm -v "$PWD/public/games/doom/wads":/wads -p 6666:6666 restful-doom-build /wads/freedoom.wad
-```
+# Run the container
+docker run --rm \
+  -v "$PWD/public/games/doom/wads":/wads \
+  -p 6666:6666 \
+  restful-doom-build \
+  bash -c "WAD=\$(ls /wads/freedoom*.wad | head -1) && /opt/restful-doom/src/restful-doom -iwad \$WAD -apiport 6666 -window"
 
-Notes and warnings
-- `restful-doom` is a native server program — it is not playable inside a static-only website. Use the Docker approach above to run a host that communicates over HTTP (port 6666 by default).
-- Do NOT commit large or proprietary WAD files. Keep WADs out of the git repo; add `public/games/doom/wads/` to `.gitignore` if you plan to run locally and do not want to commit them.
-- Building requires network access and development toolchains; the Dockerfile encapsulates these steps to keep your host environment clean.
 
-If you want a browser-playable WASM DOOM engine instead, I can try to integrate a prebuilt Emscripten-based port (e.g., prboom-wasm or chocolate-doom wasm builds) but that is a separate integration with different build steps and licensing considerations.
+FILES IN THIS DIRECTORY
+=======================
+- Dockerfile.build      → Docker build configuration for restful-doom
+- docker-compose.yml    → Docker Compose configuration (at repository root)
+- run_restful_doom.sh   → Shell script helper for running the container
+- index.html            → Web interface for interacting with the DOOM API
+- LICENSE.txt           → License information for all components
+- README.txt            → This file
+- wads/                 → Place your WAD files here (gitignored)
 
+
+API ENDPOINTS
+=============
+Once running, the restful-doom API exposes endpoints like:
+- POST http://localhost:6666/new_game
+- POST http://localhost:6666/forward
+- POST http://localhost:6666/back
+- POST http://localhost:6666/left
+- POST http://localhost:6666/right
+- POST http://localhost:6666/shoot
+- And many more...
+
+See the restful-doom documentation for the complete API reference.
+
+
+IMPORTANT NOTES
+===============
+- WAD files are gitignored and must be downloaded separately
+- Only use FreeDoom or other open source WADs
+- Do NOT use or distribute copyrighted commercial DOOM WADs
+- The server runs on port 6666 by default
+- This is NOT a browser WASM engine - it's a native server with HTTP API
+
+
+TROUBLESHOOTING
+===============
+Problem: "No WAD file found"
+Solution: Make sure you downloaded FreeDoom and placed it in public/games/doom/wads/
+
+Problem: Docker build fails
+Solution: Ensure you have internet connection and sufficient disk space
+
+Problem: Port 6666 already in use
+Solution: Stop other services on port 6666 or modify the port in docker-compose.yml
+
+Problem: Cannot connect to API
+Solution: Check that Docker container is running with: docker ps
+
+
+ALTERNATIVE: WASM Browser Integration
+======================================
+If you prefer a browser-playable WASM DOOM engine instead, that requires a different 
+integration approach with Emscripten-compiled binaries. See instruction.json for details 
+about WASM engine integration options.
