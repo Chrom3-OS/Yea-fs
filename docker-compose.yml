@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  restful-doom:
+    build:
+      context: .
+      dockerfile: public/games/doom/Dockerfile.build
+    ports:
+      - "6666:6666"
+    volumes:
+      - ./public/games/doom/wads:/wads:ro
+    command: >
+      bash -c "
+      if [ ! -f /wads/freedoom1.wad ] && [ ! -f /wads/freedoom2.wad ]; then
+        echo 'ERROR: No FreeDoom WAD file found in public/games/doom/wads/';
+        echo 'Please download FreeDoom from https://freedoom.github.io/download.html';
+        echo 'and place freedoom1.wad or freedoom2.wad in public/games/doom/wads/';
+        exit 1;
+      fi;
+      WAD_FILE=$$(ls /wads/freedoom*.wad 2>/dev/null | head -n 1);
+      if [ -f /opt/restful-doom/src/restful-doom ]; then
+        echo 'Starting restful-doom with' $$WAD_FILE;
+        /opt/restful-doom/src/restful-doom -iwad $$WAD_FILE -apiport 6666 -window;
+      else
+        echo 'ERROR: restful-doom binary not found. Build may have failed.';
+        exit 1;
+      fi
+      "
+    restart: unless-stopped

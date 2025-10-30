@@ -1,0 +1,3 @@
+Snake minimal implementation — MIT-style
+
+Small snake demo included for demo/education.

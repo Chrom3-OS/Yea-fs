@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yea-fs — Games</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#0f172a;color:#e6eef8}
+    .wrap{width:920px;padding:28px}
+    h1{margin:.2rem 0 1rem;font-weight:600}
+    ul{display:flex;gap:12px;flex-wrap:wrap;list-style:none;padding:0;margin:0}
+    li{background:#071023;border:1px solid #16324a;padding:18px;border-radius:8px;width:280px}
+    a{color:inherit;text-decoration:none}
+    small{color:#9fb0c8}
+    footer{margin-top:18px;color:#7f98b0;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Yea-fs — Games</h1>
+    <p style="margin:.2rem 0 1rem;color:#bcd3ea">Minimal static launcher — click a game to open it. Serve `/public` with a static server (see README-games.md).</p>
+    <ul>
+      <li>
+        <a href="/games/2048/">
+          <strong>2048</strong>
+          <div><small>Classic sliding-tile puzzle (MIT-like minimal implementation)</small></div>
+        </a>
+      </li>
+      <li>
+        <a href="/games/tetris/">
+          <strong>Tetris</strong>
+          <div><small>Canvas Tetris — keyboard controls (← → ↓ / Space)</small></div>
+        </a>
+      </li>
+      <li>
+        <a href="/games/snake/">
+          <strong>Snake</strong>
+          <div><small>Classic snake on canvas — arrow keys</small></div>
+        </a>
+      </li>
+      <li>
+        <a href="/games/doom/">
+          <strong>DOOM (restful-doom)</strong>
+          <div><small>Docker-based DOOM with HTTP API. Requires Docker + FreeDoom WAD. See README.</small></div>
+        </a>
+      </li>
+    </ul>
+    <footer>Run locally: <code>python3 -m http.server --directory public 8000</code> and open <code>http://localhost:8000/games/</code></footer>
+  </div>
+</body>
+</html>
