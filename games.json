@@ -1,0 +1,329 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Configuration for free, open-source, single-player web games",
+    "lastUpdated": "2025-10-30",
+    "totalGames": 10
+  },
+  "ai_prompt": {
+    "instruction": "You are tasked with integrating single-player web games into a browser-based gaming platform. Each game entry contains the necessary information to embed and run the game. Use the implementation details to set up each game properly. All games are open-source, free to use, and designed to run directly in the browser without iframes where possible. Follow the setup instructions for each game carefully.",
+    "requirements": [
+      "All games must be single-player",
+      "No iframe usage (use direct embedding when possible)",
+      "Games must be free and open-source",
+      "Easy setup and deployment",
+      "Browser-compatible (HTML5/WebAssembly/JavaScript)"
+    ]
+  },
+  "games": [
+    {
+      "id": "doom",
+      "name": "Doom",
+      "description": "Classic first-person shooter compiled to WebAssembly",
+      "type": "fps",
+      "license": "GPL",
+      "repository": "https://github.com/cloudflare/doom-wasm",
+      "technology": "WebAssembly",
+      "implementation": {
+        "method": "direct_embed",
+        "steps": [
+          "Clone the repository: git clone https://github.com/cloudflare/doom-wasm",
+          "Build the project or download pre-compiled WASM files",
+          "Include doom.wasm and doom.js in your web directory",
+          "Create an HTML page with canvas element: <canvas id='canvas'></canvas>",
+          "Load the doom.js script in your HTML",
+          "Initialize the game with Module.canvas = document.getElementById('canvas')"
+        ],
+        "files_needed": [
+          "doom.wasm",
+          "doom.js",
+          "doom.data"
+        ],
+        "cdn_alternative": "https://cdn.jsdelivr.net/gh/cloudflare/doom-wasm@master/dist/",
+        "html_snippet": "<canvas id='doomCanvas' width='800' height='600'></canvas><script src='doom.js'></script>"
+      },
+      "controls": {
+        "wasd": "Movement",
+        "mouse": "Look around",
+        "space": "Open doors/activate",
+        "ctrl": "Fire"
+      }
+    },
+    {
+      "id": "2048",
+      "name": "2048",
+      "description": "Popular sliding tile puzzle game",
+      "type": "puzzle",
+      "license": "MIT",
+      "repository": "https://github.com/gabrielecirulli/2048",
+      "technology": "JavaScript",
+      "implementation": {
+        "method": "direct_embed",
+        "steps": [
+          "Clone the repository: git clone https://github.com/gabrielecirulli/2048",
+          "Copy the js/, style/, and meta/ directories to your web root",
+          "Create an HTML file with the game container div",
+          "Link the CSS and JavaScript files",
+          "The game initializes automatically on page load"
+        ],
+        "files_needed": [
+          "js/application.js",
+          "js/game_manager.js",
+          "js/grid.js",
+          "js/tile.js",
+          "style/main.css"
+        ],
+        "html_snippet": "<div class='container'><div class='game-container'></div></div><script src='js/application.js'></script>"
+      },
+      "controls": {
+        "arrow_keys": "Slide tiles"
+      }
+    },
+    {
+      "id": "tetris",
+      "name": "Tetris",
+      "description": "Classic falling block puzzle game",
+      "type": "puzzle",
+      "license": "MIT",
+      "repository": "https://github.com/dionyziz/canvas-tetris",
+      "technology": "JavaScript/Canvas",
+      "implementation": {
+        "method": "direct_embed",
+        "steps": [
+          "Clone the repository: git clone https://github.com/dionyziz/canvas-tetris",
+          "Copy tetris.js to your web directory",
+          "Create an HTML file with a canvas element",
+          "Link the tetris.js script",
+          "Initialize the game with new Tetris()"
+        ],
+        "files_needed": [
+          "tetris.js"
+        ],
+        "html_snippet": "<canvas id='tetris' width='300' height='600'></canvas><script src='tetris.js'></script>"
+      },
+      "controls": {
+        "left_right": "Move piece",
+        "up": "Rotate",
+        "down": "Soft drop",
+        "space": "Hard drop"
+      }
+    },
+    {
+      "id": "pacman",
+      "name": "Pac-Man",
+      "description": "Classic arcade maze game",
+      "type": "arcade",
+      "license": "MIT",
+      "repository": "https://github.com/daleharvey/pacman",
+      "technology": "JavaScript/Canvas",
+      "implementation": {
+        "method": "direct_embed",
+        "steps": [
+          "Clone the repository: git clone https://github.com/daleharvey/pacman",
+          "Copy all JavaScript files and sound files to your web directory",
+          "Include the main pacman.js file",
+          "Create a container div for the game",
+          "The game automatically initializes"
+        ],
+        "files_needed": [
+          "pacman.js",
+          "modernizr-1.5.min.js",
+          "jquery-1.4.2.min.js"
+        ],
+        "html_snippet": "<div id='pacman'></div><script src='pacman.js'></script>"
+      },
+      "controls": {
+        "arrow_keys": "Move Pac-Man"
+      }
+    },
+    {
+      "id": "snake",
+      "name": "Snake",
+      "description": "Classic snake game",
+      "type": "arcade",
+      "license": "MIT",
+      "repository": "https://github.com/patorjk/JavaScript-Snake",
+      "technology": "JavaScript/Canvas",
+      "implementation": {
+        "method": "direct_embed",
+        "steps": [
+          "Clone the repository: git clone https://github.com/patorjk/JavaScript-Snake",
+          "Copy snake.js to your web directory",
+          "Create an HTML file with a canvas element",
+          "Link the script file",
+          "Game starts automatically"
+        ],
+        "files_needed": [
+          "snake.js"
+        ],
+        "html_snippet": "<canvas id='snakeCanvas' width='450' height='450'></canvas><script src='snake.js'></script>"
+      },
+      "controls": {
+        "arrow_keys": "Change direction"
+      }
+    },
+    {
+      "id": "minesweeper",
+      "name": "Minesweeper",
+      "description": "Classic puzzle game about finding mines",
+      "type": "puzzle",
+      "license": "MIT",
+      "repository": "https://github.com/wkud/minesweeper",
+      "technology": "JavaScript",
+      "implementation": {
+        "method": "direct_embed",
+        "steps": [
+          "Clone the repository: git clone https://github.com/wkud/minesweeper",
+          "Copy JavaScript and CSS files to your web directory",
+          "Create an HTML container for the game board",
+          "Link the CSS and JS files",
+          "Initialize with new Minesweeper()"
+        ],
+        "files_needed": [
+          "minesweeper.js",
+          "style.css"
+        ],
+        "html_snippet": "<div id='minesweeper'></div><script src='minesweeper.js'></script>"
+      },
+      "controls": {
+        "left_click": "Reveal cell",
+        "right_click": "Flag mine"
+      }
+    },
+    {
+      "id": "breakout",
+      "name": "Breakout",
+      "description": "Classic brick-breaking game",
+      "type": "arcade",
+      "license": "MIT",
+      "repository": "https://github.com/end3r/JavaScript-Game-Controls",
+      "technology": "JavaScript/Canvas",
+      "implementation": {
+        "method": "direct_embed",
+        "steps": [
+          "Create a canvas element in HTML",
+          "Copy the breakout game JavaScript code",
+          "Initialize the game loop with requestAnimationFrame",
+          "Handle paddle controls with keyboard events"
+        ],
+        "files_needed": [
+          "breakout.js"
+        ],
+        "html_snippet": "<canvas id='breakoutCanvas' width='480' height='320'></canvas><script src='breakout.js'></script>"
+      },
+      "controls": {
+        "left_right": "Move paddle"
+      }
+    },
+    {
+      "id": "chess",
+      "name": "Chess",
+      "description": "Classic chess game with AI opponent",
+      "type": "board_game",
+      "license": "GPL",
+      "repository": "https://github.com/jhlywa/chess.js",
+      "technology": "JavaScript",
+      "implementation": {
+        "method": "direct_embed",
+        "steps": [
+          "Clone the repository: git clone https://github.com/jhlywa/chess.js",
+          "Include chess.js library",
+          "Add chessboard.js for the UI",
+          "Create a div for the chess board",
+          "Initialize with new Chess() and Chessboard()",
+          "Implement AI using minimax or similar algorithm"
+        ],
+        "files_needed": [
+          "chess.js",
+          "chessboard.js",
+          "chessboard.css"
+        ],
+        "html_snippet": "<div id='chessboard' style='width: 400px'></div><script src='chess.js'></script><script src='chessboard.js'></script>"
+      },
+      "controls": {
+        "mouse": "Drag and drop pieces"
+      }
+    },
+    {
+      "id": "asteroids",
+      "name": "Asteroids",
+      "description": "Classic space shooter game",
+      "type": "arcade",
+      "license": "MIT",
+      "repository": "https://github.com/dmcinnes/HTML5-Asteroids",
+      "technology": "JavaScript/Canvas",
+      "implementation": {
+        "method": "direct_embed",
+        "steps": [
+          "Clone the repository: git clone https://github.com/dmcinnes/HTML5-Asteroids",
+          "Copy the JavaScript files to your web directory",
+          "Create a canvas element",
+          "Link the game scripts",
+          "Game initializes automatically"
+        ],
+        "files_needed": [
+          "asteroids.js",
+          "game.js"
+        ],
+        "html_snippet": "<canvas id='canvas' width='800' height='600'></canvas><script src='asteroids.js'></script>"
+      },
+      "controls": {
+        "up": "Thrust",
+        "left_right": "Rotate ship",
+        "space": "Fire"
+      }
+    },
+    {
+      "id": "sokoban",
+      "name": "Sokoban",
+      "description": "Classic puzzle game about pushing boxes",
+      "type": "puzzle",
+      "license": "MIT",
+      "repository": "https://github.com/beginner-corp/sokoban",
+      "technology": "JavaScript",
+      "implementation": {
+        "method": "direct_embed",
+        "steps": [
+          "Clone the repository: git clone https://github.com/beginner-corp/sokoban",
+          "Copy game files to your web directory",
+          "Create a container div for the game",
+          "Link JavaScript and CSS files",
+          "Initialize the game with level data"
+        ],
+        "files_needed": [
+          "sokoban.js",
+          "levels.js",
+          "style.css"
+        ],
+        "html_snippet": "<div id='sokoban-game'></div><script src='sokoban.js'></script>"
+      },
+      "controls": {
+        "arrow_keys": "Move player/push boxes"
+      }
+    }
+  ],
+  "deployment_notes": {
+    "hosting": [
+      "All games can be hosted on static hosting platforms (GitHub Pages, Netlify, Vercel)",
+      "Ensure all game assets are properly licensed before deployment",
+      "Test games across different browsers for compatibility"
+    ],
+    "optimization": [
+      "Minify JavaScript files for production",
+      "Compress image and audio assets",
+      "Use CDN for common libraries when available",
+      "Implement lazy loading for better performance"
+    ],
+    "common_dependencies": [
+      "Most games require only vanilla JavaScript",
+      "Some games may need jQuery (can often be removed with refactoring)",
+      "Canvas API is supported in all modern browsers",
+      "WebAssembly support needed for Doom"
+    ]
+  },
+  "integration_examples": {
+    "basic_html_template": "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Game</title><link rel='stylesheet' href='game.css'></head><body><div id='game-container'></div><script src='game.js'></script></body></html>",
+    "game_selector": "Create a menu page that lists all games and allows users to select which one to play",
+    "styling": "Apply consistent CSS styling across all games for a unified look and feel"
+  }
+}

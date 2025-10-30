@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yea-fs - Single Player Web Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .game-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-color: #667eea;
+        }
+        
+        .game-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+        
+        .game-card .type {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+        
+        .game-card .description {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .game-card .tech {
+            color: #764ba2;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .game-card .license {
+            color: #888;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+        
+        .controls {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .controls-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        .control-item {
+            font-size: 0.85em;
+            color: #666;
+            margin: 4px 0;
+        }
+        
+        .info-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .info-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .info-section ul {
+            list-style-position: inside;
+            color: #666;
+        }
+        
+        .info-section li {
+            margin: 8px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #764ba2;
+        }
+        
+        .metadata {
+            text-align: center;
+            color: #888;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Yea-fs Game Collection</h1>
+        <p class="subtitle">Free, Open-Source, Single-Player Web Games</p>
+        
+        <div class="info-section">
+            <h2>📋 About This Collection</h2>
+            <ul>
+                <li><strong>10 Classic Games</strong> ready to integrate</li>
+                <li><strong>No iframes</strong> - Direct embedding for better performance</li>
+                <li><strong>All Open Source</strong> - Free to use and modify</li>
+                <li><strong>Single-Player Only</strong> - Perfect for personal use</li>
+                <li><strong>AI-Ready JSON</strong> - Structured configuration included</li>
+            </ul>
+        </div>
+        
+        <div id="games-container" class="games-grid">
+            <!-- Games will be loaded here -->
+        </div>
+        
+        <div class="metadata">
+            <p><strong>Total Games:</strong> <span id="total-games">Loading...</span></p>
+            <p><strong>Last Updated:</strong> <span id="last-updated">Loading...</span></p>
+            <p><strong>Version:</strong> <span id="version">Loading...</span></p>
+        </div>
+    </div>
+    
+    <script>
+        // Load games from JSON
+        fetch('games.json')
+            .then(response => response.json())
+            .then(data => {
+                // Display metadata
+                document.getElementById('total-games').textContent = data.metadata.totalGames;
+                document.getElementById('last-updated').textContent = data.metadata.lastUpdated;
+                document.getElementById('version').textContent = data.metadata.version;
+                
+                // Display games
+                const gamesContainer = document.getElementById('games-container');
+                data.games.forEach(game => {
+                    const gameCard = document.createElement('div');
+                    gameCard.className = 'game-card';
+                    
+                    // Build controls list
+                    let controlsHtml = '';
+                    if (game.controls) {
+                        controlsHtml = '<div class="controls"><div class="controls-title">Controls:</div>';
+                        for (const [key, value] of Object.entries(game.controls)) {
+                            controlsHtml += `<div class="control-item"><strong>${key.replace(/_/g, ' ')}:</strong> ${value}</div>`;
+                        }
+                        controlsHtml += '</div>';
+                    }
+                    
+                    gameCard.innerHTML = `
+                        <h3>${game.name}</h3>
+                        <span class="type">${game.type.replace(/_/g, ' ')}</span>
+                        <div class="description">${game.description}</div>
+                        <div class="tech">Technology: ${game.technology}</div>
+                        <div class="license">License: ${game.license}</div>
+                        ${controlsHtml}
+                        <a href="${game.repository}" target="_blank" class="btn">View Repository</a>
+                    `;
+                    
+                    gameCard.addEventListener('click', (e) => {
+                        if (e.target.tagName !== 'A') {
+                            console.log('Game Implementation Details:', game.implementation);
+                            alert(`${game.name}\n\nImplementation Method: ${game.implementation.method}\n\nFiles Needed:\n${game.implementation.files_needed.join('\n')}\n\nClick "View Repository" to get started!`);
+                        }
+                    });
+                    
+                    gamesContainer.appendChild(gameCard);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading games:', error);
+                document.getElementById('games-container').innerHTML = 
+                    '<p style="text-align: center; color: red;">Error loading games. Please ensure games.json is in the same directory.</p>';
+            });
+    </script>
+</body>
+</html>
