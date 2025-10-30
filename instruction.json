@@ -1,0 +1,109 @@
+{
+  "project": "Yea-fs - Games integration",
+  "created_at": "2025-10-30T00:00:00Z",
+  "assumptions": [
+    "Target site is a static-hosted site (or simple Node/Express) serving /public files.",
+    "No iframes allowed; games must be integrated via native canvas/DOM or WASM/JS.",
+    "All games must be singleplayer-only or configured to singleplayer mode.",
+    "For DOOM, use FreeDoom WADs (provided or downloaded) rather than copyrighted commercial WADs."
+  ],
+  "constraints": {
+    "no_iframes": true,
+    "singleplayer_only": true,
+    "licenses": "Only include FOSS code and Free assets; include attribution files."
+  },
+  "games": [
+    {
+      "id": "doom",
+      "name": "DOOM (FreeDoom assets + WASM engine)",
+      "description": "WASM/JS port of a DOOM engine paired with FreeDoom WAD files (singleplayer).",
+      "example_repos": [
+        "https://github.com/chocolate-doom/chocolate-doom",
+        "https://freedoom.github.io/"
+      ],
+      "license": "Engine: GPL; Assets: FreeDoom (see project)",
+      "integration": {
+        "destination": "/public/games/doom/",
+        "required_files": ["engine.wasm", "engine.js", "freedoom.wad", "index.html", "LICENSE.txt"],
+        "init_example": "engine.init({canvas: document.getElementById('doom-canvas'), wad: '/games/doom/freedoom.wad'});",
+        "notes": "Prefer prebuilt WASM engine; if unavailable, add Emscripten build instructions to compile chocolate-doom or prboom-ng. Do NOT bundle proprietary WADs."
+      }
+    },
+    {
+      "id": "2048",
+      "name": "2048",
+      "repo": "https://github.com/gabrielecirulli/2048",
+      "license": "MIT",
+      "integration": {
+        "destination": "/public/games/2048/",
+        "required_files": ["index.html", "game.js", "style.css", "LICENSE.txt"],
+        "init_example": "Include the game's script on the page; it runs on load. Wrap in an explicit init(container) if embedding is required."
+      }
+    },
+    {
+      "id": "phaser_demos",
+      "name": "Phaser singleplayer demos",
+      "repo": "https://github.com/photonstorm/phaser3-examples",
+      "license": "MIT",
+      "integration": {
+        "destination": "/public/games/phaser/<demo>/",
+        "required_files": ["phaser.min.js", "demo.js", "assets/"],
+        "init_example": "Include phaser runtime and demo script, mount to a container div."
+      }
+    },
+    {
+      "id": "tetris",
+      "name": "Tetris (canvas)",
+      "license": "MIT or similar",
+      "integration": {
+        "destination": "/public/games/tetris/",
+        "required_files": ["index.html", "tetris.js", "style.css", "LICENSE.txt"],
+        "init_example": "Include script and expose a restart/init function if embedding."
+      }
+    },
+    {
+      "id": "snake",
+      "name": "Snake (canvas)",
+      "license": "MIT or similar",
+      "integration": {
+        "destination": "/public/games/snake/",
+        "required_files": ["index.html", "snake.js", "style.css", "LICENSE.txt"]
+      }
+    },
+    {
+      "id": "minesweeper",
+      "name": "Minesweeper",
+      "license": "MIT or similar",
+      "integration": {
+        "destination": "/public/games/minesweeper/",
+        "required_files": ["index.html", "minesweeper.js", "style.css", "LICENSE.txt"]
+      }
+    },
+    {
+      "id": "tic80",
+      "name": "TIC-80 cartridges (singleplayer)",
+      "repo": "https://github.com/nesbox/TIC-80",
+      "integration": {
+        "destination": "/public/games/tic80/",
+        "required_files": ["tic80.wasm", "tic80.js", "cartridges/"],
+        "init_example": "tic80Player.loadCartridge('/games/tic80/cartridges/mycart.tic');"
+      }
+    }
+  ],
+  "deliverables": {
+    "file_changes": [
+      "Add /public/games/<name>/ folders with game files and LICENSE",
+      "Add /public/games/index.html listing all games (title, description, link, thumbnail)",
+      "Add /README-games.md with usage and license notes",
+      "Optional: add a small server script to serve .wasm with correct MIME if required",
+      "Optional tests: smoke tests that load each game's index and check for main canvas element"
+    ],
+    "verification": [
+      "Open /games/index.html and confirm each link loads the game's page and shows a canvas or playable UI",
+      "For DOOM, verify FreeDoom WAD loads and the engine shows the main menu",
+      "Run a basic headless test (puppeteer) to load each game page and check for '#game-root' or a canvas element"
+    ]
+  },
+  "ai_prompt": "You are an expert automated developer. Implement the following into the repository's `public` folder so that each listed game is self-hosted, singleplayer, and does not use iframes. Use only FOSS code and FreeDoom for DOOM assets. Create folders, copy or build minimal working static files for each game, add `public/games/index.html` (game list), and add `README-games.md` documenting setup and license attributions. For DOOM, prefer a prebuilt WASM engine if available; if not available, add build instructions and a Dockerfile or Emscripten command to compile chocolate-doom/prboom into WASM. Add small smoke tests (puppeteer or Playwright) that load each game's page and assert presence of a canvas or `#game-root`. Return a JSON report describing created files, any external builds required, and how to run the verification steps. Be careful: do not include or bundle any proprietary WADs (Doom shareware/full). Use FreeDoom or instruct how to add user-provided WAD files. Output only structured JSON with keys: created_files[], build_commands[], test_commands[], notes.",
+  "notes": "This file was generated to be sent to an automation agent or to serve as a specification for manual integration. Review licenses before bundling any assets."
+}

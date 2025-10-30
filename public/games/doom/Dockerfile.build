@@ -1,0 +1,24 @@
+FROM ubuntu:24.04
+
+# Build-time dependencies for Chocolate Doom / restful-doom
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential autoconf automake libtool pkg-config git ca-certificates wget bzip2 \
+    libsdl2-dev libsdl2-mixer-dev libpng-dev libjpeg-dev libsndfile1-dev libopenal-dev \
+    libfreetype6-dev libvorbis-dev libflac-dev libcurl4-openssl-dev zlib1g-dev python3 python3-pip \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt
+
+# Clone upstream restful-doom and build
+RUN git clone --depth 1 https://github.com/jeff-1amstudios/restful-doom.git /opt/restful-doom
+WORKDIR /opt/restful-doom
+
+# The project includes helper scripts. Attempt the provided build script which wraps dependency/config steps.
+RUN chmod +x ./configure-and-build.sh || true
+RUN ./configure-and-build.sh || true
+
+# Fallback: run a standard configure + make if available
+RUN if [ -f configure ]; then ./configure && make -j$(nproc); fi || true
+RUN if [ -f src/restful-doom ]; then echo "Built: src/restful-doom"; else echo "Build may have failed — check build logs"; fi
+
+CMD ["/bin/bash"]

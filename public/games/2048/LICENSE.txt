@@ -1,0 +1,4 @@
+2048 minimal implementation — MIT-style
+
+This file contains a minimal implementation of the 2048 game included for demo/education.
+You may reuse or adapt the code under MIT-like terms.

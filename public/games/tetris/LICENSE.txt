@@ -1,0 +1,3 @@
+Tetris minimal implementation — MIT-style
+
+This file contains a small canvas Tetris demo included for demo/education purposes.
