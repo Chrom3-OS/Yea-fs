@@ -76,7 +76,7 @@ docker-compose down
 
 ### Docker build fails
 - Ensure you have a stable internet connection
-- Try running: `docker-compose down` then `docker-compose up --build`
+- Try running: `docker compose down` then `docker compose up --build`
 
 ### Port 6666 already in use
 - Check what's using the port: `lsof -i :6666` (Mac/Linux) or `netstat -ano | findstr :6666` (Windows)

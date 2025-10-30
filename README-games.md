@@ -28,11 +28,11 @@ The DOOM integration uses restful-doom, which requires Docker:
 
 1. Download FreeDoom WAD files from https://freedoom.github.io/download.html
 2. Place WAD file(s) in `public/games/doom/wads/`
-3. From repository root, run: `docker-compose up`
+3. From repository root, run: `docker compose up`
 4. Open http://localhost:8000/games/doom/ in your browser
 5. The DOOM API runs on http://localhost:6666
 
-For detailed instructions, see `public/games/doom/README.txt`
+For detailed instructions, see `DOOM-SETUP.md` and `public/games/doom/README.txt`
 
 Serving WASM
 - If you add `.wasm` files, ensure the host serves them with MIME `application/wasm`. Locally, the Python server usually works; some static hosts require extra config.
